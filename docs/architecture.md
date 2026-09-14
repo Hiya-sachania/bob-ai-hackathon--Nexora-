@@ -2,13 +2,6 @@
 
 ## System Architecture
 
-```graph TD
-    A[Clinical Trial Data: Sites, Subjects, Visits, Dosing, Medications] --> B[Frontend Web Application: HTML+CSS+Javascript]
-    B --> C[Protocol Specification]
-    C --> D[watsonx.ai]
-    D -->|Inference Result| C
-    C -->|Query| E[(PostgreSQL)]
-    C -->|Publish| F[Slack Webhook]```
 
 ## Components
 
