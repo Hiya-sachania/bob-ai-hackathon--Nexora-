@@ -1,6 +1,7 @@
 # Architecture
 
 ## System Architecture
+```mermaid
 graph TD
     A["Clinical Trial Data<br>Sites, Subjects, Visits,<br>Dosing, Medications"] --> B["Frontend Web Application<br>HTML + CSS + Vanilla<br>JavaScript"]
     B --> C["Protocol Specification"]
@@ -16,6 +17,8 @@ graph TD
     J --> K["Site Investigation"]
     J --> L["Portfolio CSV Export"]
     K --> M["CAPA Recommendations &<br>Report"]
+```
+
 
 ## Components
 
