@@ -1,30 +1,13 @@
 # Architecture
 
 ## System Architecture
-Clinical Trial Data
-        ↓
-Frontend Web Application
-        ↓
-Protocol Specification
-        ↓
-Protocol Comparison & Rules Engine
-        ↓
-Deviation Detection
-        ↓
-Severity Classification
-        ↓
-Site-Level Risk Scoring
-        ↓
-Risk Tier
-        ↓
-Risk Dashboard
-       ↙ ↘
-Site      CSV
-Investigation Export
-   ↓
-CAPA Report
-
-
+graph TD
+    A[Clinical Trial Data: Sites, Subjects, Visits, Dosing, Medications] --> B[Frontend Web Application: HTML+CSS+Javascript]
+    B --> C[Protocol Specification]
+    C --> D[watsonx.ai]
+    D -->|Inference Result| C
+    C -->|Query| E[(PostgreSQL)]
+    C -->|Publish| F[Slack Webhook]
 
 ## Components
 
