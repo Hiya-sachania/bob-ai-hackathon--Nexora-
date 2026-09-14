@@ -8,7 +8,7 @@
 graph TD
     A[Clinical Trial Data Sites,Subjects,Visits,Dosing,Medications] -->B[Frontend Web Application HTML+CSS+Javascript]
     B -->C[Protocol Specification]
-    C -->|SDK| D[watsonx.ai]
+     --> D[watsonx.ai]
     C -->|Query| E[PostgreSQL]
     C -->|Publish| F[Slack Webhook]
     D -->|Inference Result| C
