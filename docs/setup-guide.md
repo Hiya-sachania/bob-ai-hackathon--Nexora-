@@ -4,12 +4,13 @@
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+## Prerequisites
 
-- [ ] [e.g., Python 3.11+]
-- [ ] [e.g., Node.js 18+]
-- [ ] [e.g., Docker Desktop]
-- [ ] [e.g., An IBM Cloud account with watsonx.ai access]
+Before running the application, ensure you have:
+
+- A modern web browser such as Google Chrome, Microsoft Edge, or Firefox
+- Visual Studio Code (recommended)
+- Live Server extension for VS Code (recommended)
 
 ## Environment Variables
 
