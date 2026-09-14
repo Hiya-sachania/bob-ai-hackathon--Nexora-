@@ -31,13 +31,12 @@ graph TD
 
 | Decision | Rationale |
 |---|---|
-| [e.g., Used watsonx.ai for anomaly detection] | [e.g., Pre-trained models reduced time-to-value vs. building from scratch] |
-| [Decision 2] | [Rationale 2] |
-| [Decision 3] | [Rationale 3] |
+| [Used rules to check the protocol] | [The protocol has specific rules for visits, doses, medicines, and tests, so rules make it easier to find mistakes.] |
+| [Divided deviations into Major, Minor, and Administrative] | [This helps us understand how serious each problem is.] |
+| [Created a risk score for each site] | [It helps us quickly find which sites have more problems and need attention first.] |
+| [Added site details and CAPA recommendations] | [The risk manager can see the problem, understand why the site is risky, and decide what action to take.] |
+| [Used synthetic data] | [We can test and demonstrate our project without using real patient data.] |
 
 ## IBM Technologies Used
 
-[Explain specifically HOW you used each IBM technology — not just that you used it.]
-
-- **[IBM Tech 1, e.g., watsonx.ai]:** [How it was used — e.g., "Used the `ibm/granite-13b-instruct-v2` model via the Python SDK to classify anomaly types from log text."]
-- **[IBM Tech 2]:** [How it was used]
+IBM BOB: We used IBM BOB as part of the hackathon to help develop web page/solution. The final prototype focuses on clinical trial protocol checking, deviation detection, site risk scoring, and CAPA recommendations.
