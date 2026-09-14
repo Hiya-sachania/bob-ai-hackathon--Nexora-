@@ -23,9 +23,30 @@ Each detected problem is classified as Major, Minor, or Administrative. The syst
 [Optionally include a simple ASCII or Mermaid diagram here for quick reference.]
 
 ```
-[User] → [Frontend: React] → [API: FastAPI] → [watsonx.ai] → [Dashboard]
-                                    ↓
-                             [PostgreSQL DB]
+graph TD
+    A["Clinical Trial Data<br>Sites, Subjects, Visits,<br>Dosing, Medications"] --> B["Frontend Web Application<br>HTML + CSS + Vanilla<br>JavaScript"]
+    
+    B --> C["Protocol Specification"]
+    B --> D["Protocol Comparison &<br>Rules Engine"]
+    
+    C --> D
+    
+    D --> E["Deviation Detection"]
+    D --> F["Deviation Records"]
+    
+    E --> G["Severity Classification<br>Major / Minor /<br>Administrative"]
+    
+    G --> H["Site-Level Risk Scoring"]
+    
+    H --> I["Risk Tier<br>High / Medium / Low"]
+    
+    I --> J["Risk Dashboard"]
+    F --> J
+    
+    J --> K["Site Investigation"]
+    J --> L["Portfolio CSV Export"]
+    
+    K --> M["CAPA Recommendations &<br>Report"]
 ```
 
 ## Key Design Decisions
