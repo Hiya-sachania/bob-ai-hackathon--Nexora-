@@ -1,17 +1,20 @@
 # Solution Overview
 
 ## What We Built
-
-[Describe your solution in plain language. Avoid jargon — write as if explaining to a smart colleague unfamiliar with your tech stack.]
+We built a Clinical Trial Risk Monitor that helps risk managers quickly find problems in clinical trial data before they become bigger issues.
+The system checks patient visit records against the study protocol and identifies problems such as missed visits, visits outside the allowed time window, incorrect dosing, prohibited or restricted medicines, missing assessments, and eligibility or consent issues.
+Each detected problem is classified as Major, Minor, or Administrative. The system then combines these findings to calculate a risk score for each clinical trial site and places the site into a High, Medium, or Low risk tier.
 
 ## How It Works
 
-[Explain the core mechanism step by step. A numbered list or simple flow works well here.]
-
-1. [Step 1: e.g., "User connects their GitHub repository via OAuth"]
-2. [Step 2: e.g., "The system ingests pipeline logs and feeds them to watsonx.ai"]
-3. [Step 3: e.g., "An anomaly score is computed and displayed on the dashboard"]
-4. [Step 4: e.g., "Alerts are sent to Slack when the score exceeds a threshold"]
+1. We add the clinical trial data like sites, patients, visits, medicines, and doses.
+2. The system checks the data with the study protocol.
+3. It finds problems like missed visits, wrong doses, restricted medicines, or missing information.
+4. Each problem is given a level — Major, Minor, or Administrative.
+5. The system calculates a risk score for every site.
+6. Sites are shown as High, Medium, or Low risk on the dashboard.
+7. The user can click on a site to see its problems and recommended actions.
+8. A CAPA report can be generated, and the site data can also be exported as a CSV file.
 
 ## Architecture Diagram
 
