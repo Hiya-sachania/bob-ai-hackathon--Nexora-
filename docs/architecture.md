@@ -9,8 +9,8 @@ graph TD
     A[Clinical Trial Data Sites,Subjects,Visits,Dosing,Medications] -->B[Frontend Web Application HTML+CSS+Javascript]
     B -->C[Protocol Specification]
     C--> D[Protocol Specification]
-    C -->[Protocol Comparison & Rules Engine] E[PostgreSQL]
-    C -->|Publish| F[Slack Webhook]
+    D -->E[Protocol Comparison & Rules Engine] 
+    D-->F|Publish| F[Slack Webhook]
     D -->|Inference Result| C
 ```
 
