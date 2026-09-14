@@ -1,18 +1,30 @@
 # Architecture
 
 ## System Architecture
+Clinical Trial Data
+        ↓
+Frontend Web Application
+        ↓
+Protocol Specification
+        ↓
+Protocol Comparison & Rules Engine
+        ↓
+Deviation Detection
+        ↓
+Severity Classification
+        ↓
+Site-Level Risk Scoring
+        ↓
+Risk Tier
+        ↓
+Risk Dashboard
+       ↙ ↘
+Site      CSV
+Investigation Export
+   ↓
+CAPA Report
 
-[Describe the overall architecture of your system. Replace the Mermaid diagram below with your actual architecture.]
 
-```mermaid
-graph TD
-    A[Clinical Trial Data Sites,Subjects,Visits,Dosing,Medications] -->B[Frontend Web Application HTML+CSS+Javascript]
-    B -->C[Protocol Specification]
-    C--> D[Protocol Specification]
-    D -->E[Protocol Comparison & Rules Engine] 
-    D-->F|Publish| F[Slack Webhook]
-    D -->|Inference Result| C
-```
 
 ## Components
 
