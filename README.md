@@ -95,10 +95,11 @@ The application will open directly in your web browser.
 
 | Artifact | Link |
 |---|---|
-| 📹 Demo Video | [See demo/demo-video-link.txt](demo/demo-video-link.txt) |
+| 📹 Demo Video | (https://youtu.be/uTDun_ngx4g)) |
 | 🌐 Live Demo | [See demo/live-demo-url.txt](demo/live-demo-url.txt) |
-| 🖼️ Screenshots | [See demo/screenshots/](demo/screenshots/) |
-| 📊 Presentation | [See presentation/slides.pdf](presentation/) |
+| 🖼️ Screenshots |<img width="1366" height="651" alt="02-main-feature" src="https://github.com/user-attachments/assets/ace02c2b-99e9-4952-a03d-dafa553dc4f4" />
+ |
+| 📊 Presentation | [See presentation/slides.pdf](presentation/slides.pdf) |
 
 ---
 
