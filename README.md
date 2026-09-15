@@ -73,19 +73,20 @@ We built an AI-powered Clinical Trial Risk Monitor that checks patient records a
 > **Copy these exact steps from your [`docs/setup-guide.md`](docs/setup-guide.md)**
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/[your-repo].git
-cd [your-repo]
+# 1. Clone the repository
+git clone https://github.com/Hiya-sachania/bob-ai-hackathon--Nexora-.git
+cd bob-ai-hackathon--Nexora-
 
-# 2. Install dependencies
-[your install command here]
+# 2. No dependencies required
+The project uses HTML, CSS, and JavaScript and does not require any external packages.
 
 # 3. Configure environment
-cp .env.example .env
-# Edit .env with your values
+No environment configuration is required for the current prototype.
 
 # 4. Run the project
-[your run command here]
+Open the `src` folder and double-click `index.html`.
+
+The application will open directly in your web browser.
 ```
 
 ---
