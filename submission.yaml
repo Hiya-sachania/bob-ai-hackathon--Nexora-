@@ -69,5 +69,5 @@ artifacts:
   architecture_doc: "docs/architecture.md"
   demo_video: "https://youtu.be/uTDun_ngx4g"   # URL to hosted video (YouTube, Loom, Box)
   live_demo: "demo/live-demo-url.txt"      # URL to deployed demo (optional)
-  screenshots: "demo/screenshots/"
-  presentation: "presentation/"
+  screenshots: 
+  presentation: "presentation/slides.pdf"
