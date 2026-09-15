@@ -42,11 +42,11 @@ We built an AI-powered Clinical Trial Risk Monitor that checks patient records a
 
 | Category | Technologies |
 |---|---|
-| **Languages** | [e.g., Python, TypeScript] |
-| **Frameworks** | [e.g., FastAPI, React] |
-| **IBM Technologies** | [e.g., watsonx.ai, IBM Bob, IBM Cloud] |
-| **Databases** | [e.g., PostgreSQL, Redis] |
-| **Other** | [e.g., Docker, GitHub Actions] |
+| **Languages** | ["HTML", "CSS", "JavaScript"] |
+| **Frameworks** | [Vanilla Javascript] |
+| **IBM Technologies** | ["IBM Bob"] |
+| **Databases** | ["In-memory synthetic dataset"] |
+| **Other** | ["GitHub", "CSV Export", "CAPA Report Generation", "Web Browser"] |
 
 ---
 
@@ -103,16 +103,12 @@ cp .env.example .env
 
 ## ⚠️ Known Limitations
 
-> Be honest — judges appreciate transparency over overclaiming.
-
-- [Limitation 1: e.g., "Authentication is mocked — not production-ready"]
-- [Limitation 2: e.g., "Only tested on Chrome"]
-- [Limitation 3: e.g., "Feature X is scaffolded but not fully implemented"]
-
+The project currently uses synthetic sample data instead of real clinical trial data. The risk detection and scoring are rule-based, and some advanced AI features and real-time database integration are not included yet. It is mainly a working prototype made to demonstrate the main idea.
 ---
 
 ## 🏅 What We're Most Proud Of
-
-[Tell the judges what part of your submission is strongest and worth paying close attention to.]
+We are most proud of our simple and practical risk monitoring dashboard that turns complex clinical trial data into clear site-level 
+risk scores and protocol deviation alerts. It helps risk managers quickly identify high-risk sites, understand the reasons behind
+the risk, and take corrective action before issues become serious.
 
 ---
