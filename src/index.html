@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Clinical Trial Risk Monitor — ONCO-4471 · P1</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── CSS Variables ── */
+:root {
+  --navy:       #0f3460;
+  --navy-deep:  #0a1f3a;
+  --teal:       #0e7490;
+  --teal-light: #cffafe;
+  --teal-mid:   #06b6d4;
+  --white:      #ffffff;
+  --ink:        #1e293b;
+  --muted:      #64748b;
+  --pale:       #f0f9ff;
+  --pale-blue:  #e0f2fe;
+  --line:       #e2e8f0;
+
+  /* Dashboard tokens */
+  --primary:        #0e7490;
+  --primary-hover:  #0c6678;
+  --primary-light:  #ecfeff;
+  --primary-border: #a5f3fc;
+
+  --bg-main:      #f8fafc;
+  --bg-card:      #ffffff;
+  --text-dark:    #0f172a;
+  --text-muted:   #64748b;
+  --border-color: #e2e8f0;
+
+  --high-risk:    #dc2626;
+  --high-risk-bg: #fef2f2;
+  --med-risk:     #d97706;
+  --med-risk-bg:  #fffbe6;
+  --low-risk:     #16a34a;
+  --low-risk-bg:  #f0fdf4;
+  --admin-risk:   #0e7490;
+  --admin-risk-bg:#f0fdff;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-main);
+  color: var(--ink);
+  line-height: 1.6;
+  font-size: 15px;
+}
+h1,h2,h3 { font-family: 'Source Serif 4', serif; font-weight: 600; margin: 0; }
+p { margin: 0; }
+
+/* ── Nav ── */
+nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+nav .wrap { display: flex; align-items: center; justify-content: space-between; padding: 14px 28px; max-width: 1280px; margin: 0 auto; }
+nav .brand { font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; font-weight: 600; color: var(--navy); letter-spacing: 0.04em; }
+nav .links { display: flex; gap: 24px; }
+nav .links a { font-size: 0.85rem; color: var(--muted); text-decoration: none; transition: color 0.15s; }
+nav .links a:hover { color: var(--teal); }
+
+/* ── Wrap ── */
+.wrap { max-width: 1000px; margin: 0 auto; padding: 0 28px; }
+
+/* ── Hero ── */
+header.hero { background: var(--navy-deep); color: var(--white); padding: 80px 0 64px; }
+header.hero .eyebrow { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal-mid); margin-bottom: 16px; }
+header.hero h1 { font-size: 2.6rem; color: var(--white); margin-bottom: 14px; line-height: 1.15; }
+header.hero .sub { font-size: 1.1rem; color: #93c5fd; font-style: italic; max-width: 620px; margin-bottom: 32px; }
+header.hero .rule { width: 64px; height: 3px; background: var(--teal-mid); margin-bottom: 32px; border-radius: 2px; }
+header.hero .hero-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+header.hero .hero-stats .stat b { display: block; font-family: 'Source Serif 4', serif; font-size: 1.9rem; font-weight: 600; color: var(--white); }
+header.hero .hero-stats .stat span { font-size: 0.82rem; color: #93c5fd; }
+
+/* ── Sections ── */
+section { padding: 64px 0; }
+section.alt { background: #f8fafc; }
+.section-head { margin-bottom: 32px; max-width: 640px; }
+.section-head h2 { font-size: 1.7rem; margin-bottom: 10px; color: var(--navy); }
+.section-head p { color: var(--muted); font-size: 0.98rem; }
+
+/* ── Stat Grid ── */
+.stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+.stat-card { background: var(--pale-blue); padding: 28px 18px; text-align: center; border-radius: 8px; border: 1px solid #bae6fd; }
+.stat-card b { display: block; font-family: 'Source Serif 4', serif; font-size: 1.9rem; color: var(--navy); margin-bottom: 6px; }
+.stat-card span { font-size: 0.85rem; color: var(--ink); }
+.problem-note { margin-top: 28px; font-style: italic; color: var(--teal); font-size: 0.98rem; border-left: 3px solid var(--teal-mid); padding-left: 14px; }
+
+/* ── Pillars ── */
+.pillar-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.pillar { border: 1.5px solid var(--pale-blue); padding: 26px 22px; border-radius: 10px; background: var(--white); transition: border-color 0.2s; }
+.pillar:hover { border-color: var(--teal-mid); }
+.pillar .num { width: 36px; height: 36px; border-radius: 50%; background: var(--teal); color: var(--white); font-weight: 700; font-size: 1rem; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; font-family: 'IBM Plex Mono', monospace; }
+.pillar h3 { font-size: 1.1rem; color: var(--navy); margin-bottom: 8px; }
+.pillar p { font-size: 0.92rem; color: var(--ink); }
+
+/* ── Pipeline ── */
+.pipeline { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.pipeline .step { flex: 1 1 130px; background: var(--pale-blue); padding: 18px 12px; text-align: center; font-size: 0.85rem; border-radius: 8px; border: 1px solid #bae6fd; }
+.pipeline .step.final { background: var(--teal); color: var(--white); font-weight: 600; border-color: var(--teal); }
+.pipeline .arrow { color: var(--teal); font-size: 1.3rem; }
+.pipeline-note { margin-top: 24px; font-style: italic; color: var(--muted); font-size: 0.92rem; }
+
+/* ── CAPA Section ── */
+.stat-line { display: flex; flex-wrap: wrap; gap: 0; font-family: 'IBM Plex Mono', monospace; font-size: 0.88rem; margin-bottom: 28px; }
+.stat-line .stat { padding: 0 20px 0 0; margin-right: 20px; border-right: 1px solid var(--line); }
+.stat-line .stat:last-child { border-right: none; margin-right: 0; }
+.stat-line .stat b { display: block; font-size: 1.5rem; font-family: 'Source Serif 4', serif; font-weight: 600; color: var(--navy); }
+.stat-line .stat span { color: var(--muted); }
+
+table.risk-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+.risk-table thead th { text-align: left; font-weight: 600; font-size: 0.78rem; color: var(--muted); padding: 8px 12px; border-bottom: 2px solid var(--line); background: var(--bg-main); }
+.risk-table tbody tr.site-row { cursor: pointer; border-bottom: 1px solid var(--line); transition: background 0.15s; }
+.risk-table tbody tr.site-row:hover { background: var(--pale-blue); }
+.risk-table td { padding: 13px 12px; font-size: 0.95rem; vertical-align: middle; }
+.site-name { font-weight: 700; font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; color: var(--navy); }
+.risk-pill { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+.risk-pill.High   { background: var(--high-risk-bg); color: var(--high-risk); }
+.risk-pill.Medium { background: var(--med-risk-bg);  color: var(--med-risk); }
+.risk-pill.Low    { background: var(--low-risk-bg);  color: var(--low-risk); }
+.counts { font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: var(--muted); }
+.score  { font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1rem; }
+.chevron { color: var(--muted); display: inline-block; transition: transform 0.15s; }
+tr.open .chevron { transform: rotate(90deg); }
+
+.detail-row td { padding: 0; border-bottom: 1px solid var(--line); }
+.detail { display: none; padding: 4px 16px 24px; background: #f8fafc; }
+.detail.show { display: block; }
+.detail h4 { font-size: 0.78rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin: 16px 0 8px; }
+.dev-list { list-style: none; margin: 0 0 12px; padding: 0; }
+.dev-list li { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; font-size: 0.88rem; border-bottom: 1px dashed var(--line); }
+.dev-list li:last-child { border-bottom: none; }
+.dev-sev { flex: 0 0 auto; font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; padding: 2px 7px; border-radius: 3px; font-weight: 700; white-space: nowrap; }
+.dev-sev.Major          { background: var(--high-risk-bg); color: var(--high-risk); }
+.dev-sev.Administrative { background: var(--med-risk-bg);  color: var(--med-risk); }
+.dev-sev.Minor          { background: var(--low-risk-bg);  color: var(--low-risk); }
+.dev-patient { color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; }
+.capa-tag { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--teal); background: var(--teal-light); padding: 2px 8px; border-radius: 3px; margin-bottom: 8px; font-weight: 600; }
+.actions-list { margin: 0; padding-left: 18px; }
+.actions-list li { font-size: 0.9rem; margin-bottom: 6px; color: var(--ink); }
+
+/* ── Live bar ── */
+.live-bar { display: flex; align-items: center; gap: 10px; background: var(--navy-deep); color: #93c5fd; padding: 8px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 12px; font-family: 'IBM Plex Mono', monospace; overflow: hidden; }
+.live-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; flex-shrink: 0; animation: livePulse 2s ease-in-out infinite; }
+@keyframes livePulse { 0%,100%{opacity:1;} 50%{opacity:.25;} }
+.live-ticker { flex: 1; overflow: hidden; }
+.live-ticker span { display: inline-block; animation: tickerScroll 28s linear infinite; white-space: nowrap; }
+@keyframes tickerScroll { 0%{transform:translateX(60%);} 100%{transform:translateX(-100%);} }
+.live-ts { flex-shrink: 0; color: #475569; font-size: 10px; margin-left: 12px; }
+
+/* ── Dashboard section ── */
+#dashboard { padding: 64px 0; background: #f0f9ff; }
+.dash-app { max-width: 1400px; margin: 0 auto; padding: 0 28px; }
+
+/* ── KPI cards ── */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 22px; }
+.kpi { background: var(--bg-card); padding: 16px 18px; border-radius: 10px; border: 1px solid var(--border-color); border-left: 4px solid var(--teal); }
+.kpi .num { font-size: 22px; font-weight: 700; color: var(--text-dark); font-family: 'Source Serif 4', serif; }
+.kpi .lbl { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+.kpi.risk  { border-left-color: var(--high-risk); }
+.kpi.major { border-left-color: var(--high-risk); }
+.kpi.minor { border-left-color: var(--med-risk); }
+.kpi.admin { border-left-color: var(--admin-risk); }
+
+/* ── Snapshot ── */
+.snapshot { font-size: 12px; color: var(--text-muted); background: var(--bg-card); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-color); text-align: right; white-space: nowrap; }
+
+/* ── Body grid ── */
+.body-grid { display: grid; grid-template-columns: 260px 1fr; gap: 20px; align-items: start; }
+
+/* ── Rail sidebar ── */
+.rail { background: var(--bg-card); padding: 18px; border-radius: 12px; border: 1px solid var(--border-color); }
+.rail-section { margin-bottom: 18px; }
+.rail-section:last-child { margin-bottom: 0; }
+.rail h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px; font-family: 'IBM Plex Sans', sans-serif; }
+.rail input[type="text"], .rail select { width: 100%; padding: 7px 10px; border: 1px solid var(--border-color); border-radius: 6px; outline: none; font-size: 12px; font-family: 'IBM Plex Sans', sans-serif; background: var(--bg-main); transition: border-color 0.2s; }
+.rail input[type="text"]:focus, .rail select:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-light); }
+.opt { display: flex; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 6px; cursor: pointer; }
+.swatch { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.sw-high { background: var(--high-risk); }
+.sw-med  { background: var(--med-risk); }
+.sw-low  { background: var(--low-risk); }
+.methodology-toggle { background: none; border: none; color: var(--primary); font-weight: 600; font-size: 12px; cursor: pointer; padding: 0; text-align: left; font-family: 'IBM Plex Sans', sans-serif; }
+.methodology { display: none; margin-top: 10px; font-size: 11px; color: var(--text-muted); background: var(--bg-main); padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); }
+.methodology.open { display: block; }
+.methodology p { margin-bottom: 6px; }
+.methodology p:last-child { margin-bottom: 0; }
+.methodology code { background: #e2e8f0; padding: 1px 4px; border-radius: 3px; font-size: 10px; }
+.protocol-summary { font-size: 11px; color: var(--text-muted); background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; }
+.protocol-summary .ps-row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid var(--border-color); }
+.protocol-summary .ps-row:last-child { border-bottom: none; }
+.protocol-summary .ps-val { color: var(--text-dark); font-weight: 600; }
+.btn-sim { display: flex; align-items: center; gap: 6px; font-size: 12px; width: 100%; padding: 7px 12px; border-radius: 6px; font-family: 'IBM Plex Sans', sans-serif; }
+.btn-sim .spin { display: none; }
+.btn-sim.loading .spin { display: inline-block; animation: spin360 0.8s linear infinite; }
+@keyframes spin360 { to{transform:rotate(360deg);} }
+
+/* ── Main table panel ── */
+.main { background: var(--bg-card); padding: 18px; border-radius: 12px; border: 1px solid var(--border-color); }
+.toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.count-lbl { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+
+button { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-family: 'IBM Plex Sans', sans-serif; }
+button:hover { background: var(--primary-hover); }
+button.sec { background: transparent; color: var(--primary); border: 1px solid var(--primary-border); }
+button.sec:hover { background: var(--primary-light); }
+
+/* ── Ledger table ── */
+.ledger { width: 100%; border-collapse: collapse; text-align: left; }
+.ledger th { background: var(--bg-main); padding: 10px; font-size: 11px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid var(--border-color); cursor: pointer; user-select: none; white-space: nowrap; }
+.ledger th:hover { color: var(--primary); }
+.ledger th.num, .ledger td.num { text-align: right; }
+.ledger td { padding: 10px; border-bottom: 1px solid var(--border-color); font-size: 12px; }
+.ledger tbody tr { cursor: pointer; transition: background 0.12s; }
+.ledger tbody tr:hover { background: var(--primary-light); }
+.ledger tbody tr.active-row { background: var(--primary-light); }
+.tier-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.site-id-cell { font-weight: 700; display: flex; align-items: center; gap: 7px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+.region-badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-border); }
+.risk-score { font-weight: 700; font-family: 'IBM Plex Mono', monospace; }
+.trend-up   { color: var(--high-risk); font-weight: 600; }
+.trend-down { color: var(--low-risk);  font-weight: 600; }
+.trend-flat { color: var(--text-muted); }
+td.empty { text-align: center; padding: 28px; color: var(--text-muted); }
+.tbl-foot { margin-top: 12px; font-size: 11px; color: var(--text-muted); text-align: center; }
+.pager { display: flex; gap: 5px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+.pager button { padding: 3px 9px; font-size: 11px; min-width: 32px; }
+@keyframes flashRow { 0%{background:#fef9c3;} 100%{background:transparent;} }
+.flash-row { animation: flashRow 2.5s ease-out forwards; }
+
+/* ── Drawer ── */
+.drawer-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(10,31,58,0.5); backdrop-filter: blur(2px); opacity:0; pointer-events:none; transition: opacity 0.3s; z-index:100; }
+.drawer-overlay.open { opacity:1; pointer-events:auto; }
+.drawer { position:fixed; top:0; right:0; width:520px; max-width:100vw; height:100vh; background: var(--bg-card); box-shadow: -4px 0 32px rgba(0,0,0,0.18); transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); z-index:101; display:flex; flex-direction:column; }
+.drawer.open { transform: translateX(0); }
+.drawer-head { padding: 20px 22px; border-bottom: 1px solid var(--border-color); background: var(--navy-deep); position: relative; }
+.drawer-head h2 { font-size: 17px; font-weight: 700; font-family: 'Source Serif 4', serif; color: var(--white); }
+.drawer-sub { font-size: 11px; color: #93c5fd; margin-top: 2px; }
+.drawer-head .close-btn { position:absolute; top:18px; right:18px; background:none; border:none; font-size:22px; color:#93c5fd; cursor:pointer; padding:0; line-height:1; }
+.drawer-head .close-btn:hover { color: var(--white); background: none; }
+.drawer-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin-top: 14px; }
+.dstat { background: rgba(255,255,255,0.08); padding: 7px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.12); font-size: 10px; color: #93c5fd; text-align: center; }
+.dstat b { display: block; font-size: 15px; color: var(--white); }
+.drawer-body { padding: 20px; flex:1; overflow-y:auto; }
+.risk-why { display:none; font-size:12px; padding:12px 14px; border-radius:8px; border-left:4px solid var(--muted); margin-bottom:14px; }
+.risk-why.visible { display:block; }
+.risk-why h4 { font-size:11px; font-weight:700; margin-bottom:5px; }
+.risk-why ul { margin:0; padding-left:14px; }
+.risk-why ul li { margin-bottom:3px; }
+.risk-why-high { background: var(--high-risk-bg); border-left-color: var(--high-risk); color: #7f1d1d; }
+.risk-why-high h4 { color: #991b1b; }
+.risk-why-low  { background: var(--low-risk-bg);  border-left-color: var(--low-risk);  color: #14532d; }
+.risk-why-low h4  { color: #166534; }
+.score-breakdown { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:14px; }
+.score-item { font-size:11px; color: var(--text-muted); }
+.score-item b { color: var(--text-dark); }
+.score-bar-wrap { height:4px; background: var(--border-color); border-radius:2px; margin-top:2px; }
+.score-bar { height:4px; border-radius:2px; }
+.sb-major { background: var(--high-risk); }
+.sb-minor { background: var(--med-risk); }
+.sb-trend { background: #8b5cf6; }
+.sb-capa  { background: var(--admin-risk); }
+.sev-filter { display:flex; gap:7px; margin-bottom:14px; flex-wrap:wrap; }
+.sev-chip { padding:3px 11px; border-radius:14px; background: var(--bg-main); border:1px solid var(--border-color); font-size:11px; cursor:pointer; color: var(--text-muted); font-weight:500; }
+.sev-chip.active { background: var(--primary); color:white; border-color: var(--primary); }
+.dev-item { border:1px solid var(--border-color); border-radius:8px; padding:10px; margin-bottom:10px; }
+.dev-item.missed { border-left:3px solid var(--high-risk); }
+.dev-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; }
+.dev-tag { font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; }
+.tag-major { background: var(--high-risk-bg); color: var(--high-risk); }
+.tag-minor { background: var(--med-risk-bg);  color: var(--med-risk); }
+.tag-admin { background: var(--admin-risk-bg); color: var(--admin-risk); }
+.dev-meta { font-size:10px; color: var(--text-muted); }
+.dev-body { font-size:12px; margin-bottom:7px; }
+.dev-capa { font-size:11px; background: var(--bg-main); padding:7px; border-radius:5px; color:#334155; border-left:3px solid var(--primary); }
+.drawer-actions { padding:14px 20px; border-top:1px solid var(--border-color); display:flex; gap:10px; background: var(--bg-main); }
+.drawer-actions button { flex:1; }
+
+/* ── Close section ── */
+.close-section { background: var(--navy-deep); color: var(--white); padding: 72px 0; }
+.close-section h2 { color: var(--white); font-size: 2rem; margin-bottom: 16px; max-width: 620px; }
+.close-section p { color: #93c5fd; max-width: 600px; margin-bottom: 24px; font-size: 1rem; }
+.close-section .rule { width: 64px; height: 3px; background: var(--teal-mid); margin-bottom: 24px; border-radius: 2px; }
+.close-section .credit { font-size: 0.85rem; color: #475569; }
+
+/* ── Responsive ── */
+@media(max-width:900px) {
+  .body-grid { grid-template-columns: 1fr; }
+  .rail { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+}
+@media(max-width:720px) {
+  .stat-grid { grid-template-columns: repeat(2,1fr); }
+  .pillar-grid { grid-template-columns: 1fr; }
+  header.hero h1 { font-size: 2rem; }
+  .dash-app { padding: 0 12px; }
+  .risk-table thead th:nth-child(4), .risk-table td:nth-child(4) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav>
+  <div class="wrap">
+    <div class="brand"> CLINICAL TRIAL RISK MONITOR</div>
+    <div class="links">
+      <a href="#problem">Problem</a>
+      <a href="#solution">Solution</a>
+      <a href="#how">How it works</a>
+      <a href="#dashboard">Live dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">P1 &middot; Pharma &amp; Biotech &middot; IBM Hackathon 2026</div>
+    <h1>Clinical Trial Risk Monitor</h1>
+    <p class="sub">Protocol Deviation Detector &amp; Site Risk Scoring — ONCO-4471 Phase III</p>
+    <div class="rule"></div>
+    <div class="hero-stats" id="heroStats">
+      <div class="stat"><b id="hSites">—</b><span>Active sites</span></div>
+      <div class="stat"><b id="hVisits">—</b><span>Patient visits reviewed</span></div>
+      <div class="stat"><b id="hDevs">—</b><span>Deviations detected</span></div>
+      <div class="stat"><b id="hHigh">—</b><span>High-risk sites</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ══════════════ PROBLEM ══════════════ -->
+<section id="problem">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Protocol deviations go unseen until it's too late</h2>
+      <p>A single major trial spans thousands of visits across hundreds of sites. Deviations — missed visits, wrong dosing, banned co-medications — surface only at the FDA audit, when it's already too late to fix them.</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><b>5,000+</b><span>patient visits per trial</span></div>
+      <div class="stat-card"><b>200+</b><span>sites to monitor manually</span></div>
+      <div class="stat-card"><b>6&ndash;12 mo</b><span>delay from a rejected submission</span></div>
+      <div class="stat-card"><b>$50&ndash;100M</b><span>cost of a single rejection</span></div>
+    </div>
+    <p class="problem-note">Risk managers need real-time visibility into which sites are highest risk — before problems escalate.</p>
+  </div>
+</section>
+
+<!-- ══════════════ SOLUTION ══════════════ -->
+<section class="alt" id="solution">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>What we built</h2>
+      <p>A rule-based monitor that compares every patient visit against the trial protocol, classifies deviations by ICH E6 GCP severity, and scores every site's risk in real time.</p>
+    </div>
+    <div class="pillar-grid">
+      <div class="pillar">
+        <div class="num">1</div>
+        <h3>Detect</h3>
+        <p>Compares patient records against protocol specs — visit windows, required assessments, dosing, eligibility, and co-medications — to catch every type of deviation.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">2</div>
+        <h3>Classify</h3>
+        <p>Labels every deviation Major, Minor, or Administrative — following the real ICH E6(R2) GCP standard. Completely missed visits are detected and flagged separately.</p>
+      </div>
+      <div class="pillar">
+        <div class="num">3</div>
+        <h3>Score &amp; report</h3>
+        <p>Ranks every site by weighted risk score (0–100) and generates a CAPA-ready report with corrective and preventive actions for every finding.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ HOW IT WORKS ══════════════ -->
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>How it works</h2>
+    </div>
+    <div class="pipeline">
+      <div class="step">Patient visits<br>+ protocol spec</div>
+      <div class="arrow">&rarr;</div>
+      <div class="step">Rules engine<br>compares each visit</div>
+      <div class="arrow">&rarr;</div>
+      <div class="step">ICH E6(R2)<br>severity classification</div>
+      <div class="arrow">&rarr;</div>
+      <div class="step">Site risk<br>scoring 0–100</div>
+      <div class="arrow">&rarr;</div>
+      <div class="step final">CAPA report<br>+ live dashboard</div>
+    </div>
+    <p class="pipeline-note">Everything runs as a lightweight rules engine — no ML training required, fully explainable, and demo-ready in seconds.</p>
+  </div>
+</section>
+
+
+<!-- ══════════════ LIVE DASHBOARD ══════════════ -->
+<section id="dashboard">
+<div class="dash-app">
+  <div class="section-head" style="margin-bottom:20px;">
+    <h2>Live site risk dashboard</h2>
+    <p>250 sites · 8 regions · ICH E6(R2) severity · real-time simulation. Click any row to open the site detail drawer.</p>
+  </div>
+
+  <div class="live-bar">
+    <span class="live-dot"></span>
+    <span class="live-ticker"><span id="tickerText">Monitoring engine active — ONCO-4471 Phase III</span></span>
+    <span class="live-ts" id="liveTs"></span>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px;flex-wrap:wrap;">
+    <div></div>
+    <div class="snapshot" id="snapshotBox"></div>
+  </div>
+
+  <div class="kpis" id="kpiStrip"></div>
+
+  <div class="body-grid">
+    <aside class="rail">
+      <div class="rail-section">
+        <h3>Search</h3>
+        <input type="text" id="searchBox" placeholder="Site ID or region…">
+      </div>
+      <div class="rail-section">
+        <h3>Risk tier</h3>
+        <label class="opt"><input type="checkbox" class="tierFilter" value="High" checked><span class="swatch sw-high"></span>High</label>
+        <label class="opt"><input type="checkbox" class="tierFilter" value="Medium" checked><span class="swatch sw-med"></span>Medium</label>
+        <label class="opt"><input type="checkbox" class="tierFilter" value="Low" checked><span class="swatch sw-low"></span>Low</label>
+      </div>
+      <div class="rail-section">
+        <h3>Region</h3>
+        <select id="regionFilter"><option value="">All regions</option></select>
+      </div>
+      <div class="rail-section">
+        <h3>Sort by</h3>
+        <select id="sortSelect">
+          <option value="risk_desc">Risk score (high→low)</option>
+          <option value="major_desc">Major deviations (high→low)</option>
+          <option value="trend_desc">Trend (worsening first)</option>
+          <option value="site_id">Site ID</option>
+        </select>
+      </div>
+      <div class="rail-section">
+        <h3>Simulation</h3>
+        <button id="refreshBtn" class="btn-sim sec"><span class="spin">↻</span> Simulate incoming data</button>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:5px;" id="refreshInfo">Inject new visit events and rescore sites in real time.</div>
+      </div>
+      <div class="rail-section">
+        <h3>Protocol spec</h3>
+        <div class="protocol-summary" id="protocolSummary"></div>
+      </div>
+      <div class="rail-section">
+        <button class="methodology-toggle" onclick="document.getElementById('methodBox').classList.toggle('open')">How is risk scored? ›</button>
+        <div class="methodology" id="methodBox">
+          <p><b>Severity</b> — ICH E6(R2) aligned: <code>Major</code> = safety/integrity impact; <code>Minor</code> = limited impact; <code>Administrative</code> = documentation only.</p>
+          <p><b>Risk score</b> 0–100: major rate (60 pts) + minor rate (25 pts) + 30-day trend (10 pts) + open-CAPA burden (5 pts).</p>
+          <p>Tiers: <code>High ≥ 65</code> · <code>Medium 35–64</code> · <code>Low &lt; 35</code>.</p>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="toolbar">
+        <div class="count-lbl" id="rowCount"></div>
+        <div style="display:flex;gap:8px;">
+          <button class="sec" id="exportCsvBtn">⬇ Export CSV</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="ledger" id="ledgerTable">
+          <thead>
+            <tr>
+              <th data-key="siteId">Site</th>
+              <th data-key="region">Region</th>
+              <th class="num" data-key="subjects">Subjects</th>
+              <th class="num" data-key="visits">Visits</th>
+              <th class="num" data-key="major">Major</th>
+              <th class="num" data-key="minor">Minor</th>
+              <th class="num" data-key="admin">Admin</th>
+              <th class="num" data-key="openCapa">Open CAPA</th>
+              <th data-key="trend">30-day trend</th>
+              <th class="num" data-key="riskScore">Risk score</th>
+            </tr>
+          </thead>
+          <tbody id="ledgerBody"></tbody>
+        </table>
+      </div>
+      <div class="pager" id="pager"></div>
+      <p class="tbl-foot">Synthetic dataset · seeded for reproducibility · not real patient data · ONCO-4471 Phase III</p>
+    </main>
+  </div>
+</div>
+</section>
+
+<!-- ══════════════ CLOSE ══════════════ -->
+<div class="close-section">
+  <div class="wrap">
+    <h2>Catch it before the audit, not after</h2>
+    <p>A single rejected FDA submission delays approval 6–12 months and costs $50–100M. Real-time deviation detection turns that risk into a manageable, prioritised worklist — before the audit finds it first.</p>
+    <div class="rule"></div>
+    <p class="credit">IBM Hackathon 2026 · P1 Pharma &amp; Biotech · ONCO-4471 Phase III</p>
+  </div>
+</div>
+
+<!-- ══════════════ DRAWER ══════════════ -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <button class="close-btn" id="drawerClose">&times;</button>
+    <h2 id="drawerTitle">Site</h2>
+    <div class="drawer-sub" id="drawerSub"></div>
+    <div class="drawer-stats" id="drawerStats"></div>
+  </div>
+  <div class="drawer-body">
+    <div id="riskNarrative" class="risk-why"></div>
+    <div id="scoreBreakdown" class="score-breakdown"></div>
+    <div class="sev-filter" id="sevFilter">
+      <div class="sev-chip active" data-sev="all">All</div>
+      <div class="sev-chip" data-sev="Major">Major</div>
+      <div class="sev-chip" data-sev="Minor">Minor</div>
+      <div class="sev-chip" data-sev="Administrative">Administrative</div>
+    </div>
+    <div id="devList"></div>
+  </div>
+  <div class="drawer-actions">
+    <button id="capaReportBtn">⬇ Generate CAPA report</button>
+    <button class="sec" id="drawerCloseBtn2">Close</button>
+  </div>
+</div>
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script>
+/* ── CAPA Results Section (real data from capa_report.json) ── */
+(function(){
+  var REPORT_DATA = {"generated_summary":{"total_sites":5,"total_deviations":44,"high_risk_sites":4},"sites":[{"site_id":"Site_A","risk_level":"High","risk_score":35,"deviation_counts":{"Major":10,"Minor":0,"Administrative":5},"deviations":[{"patient_id":"P001","site_id":"Site_A","visit_number":1,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 1 occurred 12 days late (expected day 0, actual day 12)"},{"patient_id":"P001","site_id":"Site_A","visit_number":3,"deviation_type":"Visit Date Slippage","severity":"Administrative","description":"Visit 3 occurred 1 day(s) late (expected day 28, actual day 29)"},{"patient_id":"P005","site_id":"Site_A","visit_number":4,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 4 occurred 15 days late (expected day 56, actual day 71)"},{"patient_id":"P010","site_id":"Site_A","visit_number":2,"deviation_type":"Wrong Dosing","severity":"Major","description":"Visit 2: gave 75mg, protocol specifies 50mg"},{"patient_id":"P010","site_id":"Site_A","visit_number":3,"deviation_type":"Wrong Dosing","severity":"Major","description":"Visit 3: gave 150mg, protocol specifies 100mg"},{"patient_id":"P016","site_id":"Site_A","visit_number":1,"deviation_type":"Wrong Dosing","severity":"Major","description":"Visit 1: gave 75mg, protocol specifies 50mg"},{"patient_id":"P016","site_id":"Site_A","visit_number":4,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 4 occurred 14 days late (expected day 56, actual day 70)"},{"patient_id":"P018","site_id":"Site_A","visit_number":2,"deviation_type":"Visit Date Slippage","severity":"Administrative","description":"Visit 2 occurred 5 day(s) late (expected day 14, actual day 19)"},{"patient_id":"P024","site_id":"Site_A","visit_number":3,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 3 occurred 19 days late (expected day 28, actual day 47)"},{"patient_id":"P025","site_id":"Site_A","visit_number":3,"deviation_type":"Visit Date Slippage","severity":"Administrative","description":"Visit 3 occurred 6 day(s) late (expected day 28, actual day 34)"},{"patient_id":"P032","site_id":"Site_A","visit_number":1,"deviation_type":"Visit Date Slippage","severity":"Administrative","description":"Visit 1 occurred 4 day(s) late (expected day 0, actual day 4)"},{"patient_id":"P033","site_id":"Site_A","visit_number":3,"deviation_type":"Visit Date Slippage","severity":"Administrative","description":"Visit 3 occurred 4 day(s) late (expected day 28, actual day 32)"},{"patient_id":"P034","site_id":"Site_A","visit_number":2,"deviation_type":"Banned Co-medication","severity":"Major","description":"Visit 2: patient on Ibuprofen, which is banned under this protocol"},{"patient_id":"P034","site_id":"Site_A","visit_number":3,"deviation_type":"Wrong Dosing","severity":"Major","description":"Visit 3: gave 50mg, protocol specifies 100mg"},{"patient_id":"P036","site_id":"Site_A","visit_number":3,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 3 occurred 9 days late (expected day 28, actual day 37)"}],"recommended_actions":["Retrain site coordinators on visit scheduling and patient follow-up procedures.","Conduct immediate dosing accuracy audit and re-certify dispensing staff.","Escalate to medical monitor; review concomitant medication screening process.","Send scheduling reminders; monitor for escalation to major deviations."]},{"site_id":"Site_E","risk_level":"High","risk_score":27,"deviation_counts":{"Major":8,"Minor":0,"Administrative":3},"deviations":[{"patient_id":"P002","site_id":"Site_E","visit_number":1,"deviation_type":"Visit Date Slippage","severity":"Administrative","description":"Visit 1 occurred 4 day(s) late (expected day 0, actual day 4)"},{"patient_id":"P002","site_id":"Site_E","visit_number":2,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 2 occurred 9 days late (expected day 14, actual day 23)"},{"patient_id":"P002","site_id":"Site_E","visit_number":3,"deviation_type":"Banned Co-medication","severity":"Major","description":"Visit 3: patient on Warfarin, which is banned under this protocol"},{"patient_id":"P006","site_id":"Site_E","visit_number":1,"deviation_type":"Visit Date Slippage","severity":"Administrative","description":"Visit 1 occurred 4 day(s) late (expected day 0, actual day 4)"},{"patient_id":"P006","site_id":"Site_E","visit_number":2,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 2 occurred 12 days late (expected day 14, actual day 26)"},{"patient_id":"P011","site_id":"Site_E","visit_number":1,"deviation_type":"Banned Co-medication","severity":"Major","description":"Visit 1: patient on Ibuprofen, which is banned under this protocol"},{"patient_id":"P011","site_id":"Site_E","visit_number":4,"deviation_type":"Banned Co-medication","severity":"Major","description":"Visit 4: patient on Warfarin, which is banned under this protocol"},{"patient_id":"P015","site_id":"Site_E","visit_number":2,"deviation_type":"Banned Co-medication","severity":"Major","description":"Visit 2: patient on Warfarin, which is banned under this protocol"},{"patient_id":"P015","site_id":"Site_E","visit_number":4,"deviation_type":"Visit Date Slippage","severity":"Administrative","description":"Visit 4 occurred 1 day(s) late (expected day 56, actual day 57)"},{"patient_id":"P026","site_id":"Site_E","visit_number":1,"deviation_type":"Wrong Dosing","severity":"Major","description":"Visit 1: gave 150mg, protocol specifies 50mg"},{"patient_id":"P028","site_id":"Site_E","visit_number":3,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 3 occurred 8 days late (expected day 28, actual day 36)"}],"recommended_actions":["Retrain site coordinators on visit scheduling and patient follow-up procedures.","Conduct immediate dosing accuracy audit and re-certify dispensing staff.","Escalate to medical monitor; review concomitant medication screening process.","Send scheduling reminders; monitor for escalation to major deviations."]},{"site_id":"Site_C","risk_level":"High","risk_score":23,"deviation_counts":{"Major":7,"Minor":0,"Administrative":2},"deviations":[{"patient_id":"P007","site_id":"Site_C","visit_number":3,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 3 occurred 11 days late (expected day 28, actual day 39)"},{"patient_id":"P009","site_id":"Site_C","visit_number":1,"deviation_type":"Wrong Dosing","severity":"Major","description":"Visit 1: gave 100mg, protocol specifies 50mg"},{"patient_id":"P009","site_id":"Site_C","visit_number":2,"deviation_type":"Banned Co-medication","severity":"Major","description":"Visit 2: patient on Ibuprofen, which is banned under this protocol"},{"patient_id":"P012","site_id":"Site_C","visit_number":2,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 2 occurred 17 days late (expected day 14, actual day 31)"},{"patient_id":"P019","site_id":"Site_C","visit_number":1,"deviation_type":"Visit Date Slippage","severity":"Administrative","description":"Visit 1 occurred 4 day(s) late (expected day 0, actual day 4)"},{"patient_id":"P019","site_id":"Site_C","visit_number":2,"deviation_type":"Wrong Dosing","severity":"Major","description":"Visit 2: gave 25mg, protocol specifies 50mg"},{"patient_id":"P020","site_id":"Site_C","visit_number":4,"deviation_type":"Visit Date Slippage","severity":"Administrative","description":"Visit 4 occurred 6 day(s) late (expected day 56, actual day 62)"},{"patient_id":"P021","site_id":"Site_C","visit_number":3,"deviation_type":"Banned Co-medication","severity":"Major","description":"Visit 3: patient on Ibuprofen, which is banned under this protocol"},{"patient_id":"P030","site_id":"Site_C","visit_number":1,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 1 occurred 11 days late (expected day 0, actual day 11)"}],"recommended_actions":["Retrain site coordinators on visit scheduling and patient follow-up procedures.","Conduct immediate dosing accuracy audit and re-certify dispensing staff.","Escalate to medical monitor; review concomitant medication screening process.","Send scheduling reminders; monitor for escalation to major deviations."]},{"site_id":"Site_B","risk_level":"High","risk_score":16,"deviation_counts":{"Major":5,"Minor":0,"Administrative":1},"deviations":[{"patient_id":"P004","site_id":"Site_B","visit_number":3,"deviation_type":"Wrong Dosing","severity":"Major","description":"Visit 3: gave 75mg, protocol specifies 100mg"},{"patient_id":"P004","site_id":"Site_B","visit_number":4,"deviation_type":"Visit Date Slippage","severity":"Administrative","description":"Visit 4 occurred 4 day(s) late (expected day 56, actual day 60)"},{"patient_id":"P029","site_id":"Site_B","visit_number":2,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 2 occurred 19 days late (expected day 14, actual day 33)"},{"patient_id":"P029","site_id":"Site_B","visit_number":4,"deviation_type":"Banned Co-medication","severity":"Major","description":"Visit 4: patient on Warfarin, which is banned under this protocol"},{"patient_id":"P035","site_id":"Site_B","visit_number":2,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 2 occurred 20 days late (expected day 14, actual day 34)"},{"patient_id":"P037","site_id":"Site_B","visit_number":1,"deviation_type":"Wrong Dosing","severity":"Major","description":"Visit 1: gave 150mg, protocol specifies 50mg"}],"recommended_actions":["Retrain site coordinators on visit scheduling and patient follow-up procedures.","Conduct immediate dosing accuracy audit and re-certify dispensing staff.","Escalate to medical monitor; review concomitant medication screening process.","Send scheduling reminders; monitor for escalation to major deviations."]},{"site_id":"Site_D","risk_level":"Medium","risk_score":9,"deviation_counts":{"Major":3,"Minor":0,"Administrative":0},"deviations":[{"patient_id":"P023","site_id":"Site_D","visit_number":1,"deviation_type":"Missed Visit","severity":"Major","description":"Visit 1 occurred 13 days late (expected day 0, actual day 13)"},{"patient_id":"P040","site_id":"Site_D","visit_number":1,"deviation_type":"Wrong Dosing","severity":"Major","description":"Visit 1: gave 100mg, protocol specifies 50mg"},{"patient_id":"P040","site_id":"Site_D","visit_number":2,"deviation_type":"Banned Co-medication","severity":"Major","description":"Visit 2: patient on Warfarin, which is banned under this protocol"}],"recommended_actions":["Retrain site coordinators on visit scheduling and patient follow-up procedures.","Conduct immediate dosing accuracy audit and re-certify dispensing staff.","Escalate to medical monitor; review concomitant medication screening process."]}]};
+
+  var s = REPORT_DATA.generated_summary;
+  document.getElementById('capaStatLine').innerHTML =
+    '<div class="stat"><b>'+s.total_sites+'</b><span>Sites monitored</span></div>' +
+    '<div class="stat"><b>'+s.total_deviations+'</b><span>Deviations detected</span></div>' +
+    '<div class="stat"><b>'+s.high_risk_sites+'</b><span>High-risk sites</span></div>';
+
+  var tbody = document.getElementById('capaTableBody');
+  REPORT_DATA.sites.forEach(function(site, i){
+    var rowId = 'capa-row-' + i;
+    var tr = document.createElement('tr');
+    tr.className = 'site-row';
+    tr.innerHTML =
+      '<td><span class="chevron">&#9656;</span></td>' +
+      '<td class="site-name">' + site.site_id + '</td>' +
+      '<td><span class="risk-pill ' + site.risk_level + '">' + site.risk_level + '</span></td>' +
+      '<td class="counts">' + site.deviation_counts.Major + ' major &middot; ' + site.deviation_counts.Administrative + ' admin</td>' +
+      '<td class="score">' + site.risk_score + '</td>';
+    tr.addEventListener('click', function(){ toggleCapaRow(rowId, tr); });
+    tbody.appendChild(tr);
+
+    var detailTr = document.createElement('tr');
+    detailTr.className = 'detail-row';
+    detailTr.innerHTML = '<td colspan="5"><div class="detail" id="' + rowId + '"></div></td>';
+    tbody.appendChild(detailTr);
+    detailTr.querySelector('.detail').innerHTML = buildCapaDetail(site);
+  });
+
+  function buildCapaDetail(site){
+    var devHtml = '<h4>Deviations</h4><ul class="dev-list">';
+    if(site.deviations.length === 0){
+      devHtml += '<li><span class="dev-text">No deviations recorded at this site.</span></li>';
+    } else {
+      site.deviations.forEach(function(d){
+        devHtml += '<li><span class="dev-sev ' + d.severity + '">' + d.severity + '</span><span class="dev-text">' + d.description + ' <span class="dev-patient">(' + d.patient_id + ')</span></span></li>';
+      });
+    }
+    devHtml += '</ul>';
+    var actHtml = '<span class="capa-tag">CAPA Recommended Actions</span><ul class="actions-list">';
+    site.recommended_actions.forEach(function(a){ actHtml += '<li>' + a + '</li>'; });
+    actHtml += '</ul>';
+    return devHtml + actHtml;
+  }
+
+  function toggleCapaRow(rowId, tr){
+    var detail = document.getElementById(rowId);
+    var shown = detail.classList.contains('show');
+    detail.classList.toggle('show', !shown);
+    tr.classList.toggle('open', !shown);
+  }
+})();
+</script>
+
+<script>
+/* ── Live 250-site dashboard ── */
+(function(){
+  "use strict";
+
+  function mulberry32(a){
+    return function(){
+      a|=0; a=a+0x6D2B79F5|0;
+      var t=Math.imul(a^a>>>15,1|a);
+      t=t+Math.imul(t^t>>>7,61|t)^t;
+      return ((t^t>>>14)>>>0)/4294967296;
+    };
+  }
+  var rand=mulberry32(20260913);
+  function pick(arr){return arr[Math.floor(rand()*arr.length)];}
+  function randInt(a,b){return Math.floor(rand()*(b-a+1))+a;}
+  function chance(p){return rand()<p;}
+
+  var TODAY=new Date(2026,8,13);
+  var PROTOCOL={
+    studyId:"ONCO-4471", phase:"III", drug:"Compound X",
+    visits:[
+      {id:"SCR",name:"Screening",        day:-14,window:7, critical:true, req:["consent","labs","ecg","eligibility"]},
+      {id:"BSL",name:"Baseline / Day 1", day:0,  window:0, critical:true, req:["vitals","labs","ecg","dosing"]},
+      {id:"W2", name:"Week 2",           day:14, window:3, critical:false,req:["vitals","ae","dosing"]},
+      {id:"W4", name:"Week 4",           day:28, window:3, critical:true, req:["vitals","labs","ae","dosing"]},
+      {id:"W8", name:"Week 8",           day:56, window:5, critical:false,req:["vitals","ae","dosing"]},
+      {id:"W12",name:"Week 12",          day:84, window:5, critical:true, req:["vitals","labs","ecg","ae","dosing"]},
+      {id:"W24",name:"Week 24",          day:168,window:7, critical:true, req:["vitals","labs","ecg","ae","dosing","tumor_assessment"]},
+      {id:"EOS",name:"End of Study",     day:196,window:7, critical:true, req:["vitals","labs","ae","final_assessment"]}
+    ],
+    dosing:{targetMg:200,majorPct:20,minorPct:10},
+    prohibitedMeds:["Warfarin","Ketoconazole (strong CYP3A4 inhibitor)","Other investigational agent","Live attenuated vaccine"],
+    restrictedMeds:["Grapefruit / moderate CYP3A4 inhibitor","St. John's Wort","Chronic NSAID use"],
+    concomitantPool:["Acetaminophen","Loratadine","Omeprazole","Metformin","Lisinopril","Atorvastatin"],
+    eligibility:{minAge:18,maxAge:75}
+  };
+
+  var REGIONS=["Northeast US","Southeast US","Midwest US","Western US","Western Europe","Eastern Europe","Latin America","Asia-Pacific"];
+
+  var CAPA_TEXT={
+    MISSED_VISIT:{capa:"Contact the site to determine why the required visit was missed; document the deviation in the EDC and notify the medical monitor.",preventive:"Implement automated visit-due reminders 7 and 3 days before each scheduled visit; add a missed-visit alert to the site EDC dashboard."},
+    VISIT_WINDOW:{capa:"Retrain site coordinator on protocol-defined visit windows; add automated visit-window reminders in the site EDC/scheduling tool.",preventive:"Implement site-level visit-window alerting 5 days ahead of each scheduled window close."},
+    DOSING:{capa:"Reconcile drug accountability logs with dispensing records; retrain dosing staff on the protocol dosing algorithm.",preventive:"Add a pharmacist double-check step before dispensing; configure EDC hard-stop for doses outside ±10% of target."},
+    PROHIBITED_MED:{capa:"Conduct source document review for concomitant medication reconciliation; report as a protocol deviation with medical monitor review.",preventive:"Add a hard-stop prohibited-medication check to the site concomitant medication intake form."},
+    RESTRICTED_MED:{capa:"Obtain documented medical monitor justification or discontinue restricted medication per protocol.",preventive:"Provide site staff a quick-reference restricted-medication card at each visit; add EDC warning on restricted-med entry."},
+    MISSING_ASSESSMENT:{capa:"Schedule an unscheduled visit to recover the missing assessment where clinically feasible; document rationale if not recoverable.",preventive:"Add the assessment to the site visit checklist with a mandatory sign-off field in the EDC."},
+    ELIGIBILITY:{capa:"Escalate to medical monitor for a formal eligibility deviation assessment; determine subject continuation per protocol.",preventive:"Require dual sign-off (PI + coordinator) on eligibility criteria at screening; add age-range validation to the EDC."},
+    CONSENT:{capa:"Re-consent subject immediately if not yet done; notify IRB/EC per reporting timelines.",preventive:"Add consent-completeness verification as a gating step before any study procedure in the EDC."}
+  };
+
+  /* ── Data generation ── */
+  var sites=[]; var numSites=250;
+  for(var s=0;s<numSites;s++){
+    var sid="S"+String(s+1).padStart(3,"0");
+    var base=rand(); var prop=Math.pow(base,5.5);
+    if(chance(0.06)) prop=0.5+rand()*0.45;
+    sites.push({siteId:sid,region:pick(REGIONS),propensity:prop,subjects:[],visits:[]});
+  }
+
+  var totSubj=0,totVisits=0;
+  sites.forEach(function(site){
+    var nSubj=randInt(3,10);
+    for(var i=0;i<nSubj;i++){
+      var subjId=site.siteId+"-"+String(i+1).padStart(3,"0");
+      var age=chance(0.025)?pick([16,17,76,79,82]):randInt(18,75);
+      var enroll=randInt(-540,-30);
+      var subj={subjectId:subjId,age:age,enrollDay:enroll};
+      site.subjects.push(subj); totSubj++;
+      PROTOCOL.visits.forEach(function(vSpec){
+        var sd=new Date(TODAY); sd.setDate(sd.getDate()+enroll+vSpec.day);
+        if(sd>TODAY) return;
+        var p=site.propensity;
+        if(chance(0.01+p*0.04)) return;
+        var w=vSpec.window>0?vSpec.window:2;
+        var off=Math.round((rand()-0.5)*2*w*(0.4+p*1.3));
+        if(chance(0.012)) off+=(chance(0.5)?1:-1)*randInt(w+2,w+10);
+        var ad=new Date(sd); ad.setDate(ad.getDate()+off);
+        if(ad>TODAY) ad=new Date(TODAY);
+        var dt=PROTOCOL.dosing.targetMg;
+        var drift=(rand()-0.5)*2*(2.5+p*20);
+        var dose=Math.round(dt*(1+drift/100));
+        var conc=[];
+        if(chance(0.003+p*0.09)) conc.push(pick(PROTOCOL.prohibitedMeds));
+        if(chance(0.006+p*0.12)) conc.push(pick(PROTOCOL.restrictedMeds));
+        if(chance(0.35)) conc.push(pick(PROTOCOL.concomitantPool));
+        var miss=[];
+        vSpec.req.forEach(function(a){if(chance(0.002+p*0.07)) miss.push(a);});
+        var conDoc=vSpec.id!=="SCR"?true:!chance(0.004+p*0.04);
+        var conDel=vSpec.id==="SCR"?chance(0.008+p*0.05):false;
+        site.visits.push({
+          site:site,subject:subj,visitSpec:vSpec,
+          scheduledDate:sd,actualDate:ad,
+          dayDiff:Math.round((ad-sd)/86400000),
+          dose:dose,concomitant:conc,missingAssessments:miss,
+          consentDocumented:conDoc,consentDelayed:conDel,
+          closed:chance(0.55)
+        });
+        totVisits++;
+      });
+    }
+  });
+
+  /* ── Rules engine ── */
+  function evaluateVisit(v){
+    var out=[]; var vs=v.visitSpec;
+    var absDiff=Math.abs(v.dayDiff); var over=absDiff-vs.window;
+    if(over>0){
+      var sev=(over>7||(vs.critical&&over>4))?"Major":(over>3?"Minor":"Administrative");
+      out.push({ruleId:"VISIT_WINDOW",severity:sev,description:"Visit "+vs.name+" occurred "+absDiff+" day(s) from scheduled date (protocol window ±"+vs.window+"d)."});
+    }
+    if(vs.req.indexOf("dosing")>=0){
+      var tgt=PROTOCOL.dosing.targetMg;
+      var pct=Math.abs(v.dose-tgt)/tgt*100;
+      if(pct>PROTOCOL.dosing.majorPct) out.push({ruleId:"DOSING",severity:"Major",description:"Administered dose "+v.dose+"mg deviates "+pct.toFixed(1)+"% from target ("+tgt+"mg), exceeding the "+PROTOCOL.dosing.majorPct+"% major threshold."});
+      else if(pct>PROTOCOL.dosing.minorPct) out.push({ruleId:"DOSING",severity:"Minor",description:"Administered dose "+v.dose+"mg deviates "+pct.toFixed(1)+"% from target ("+tgt+"mg)."});
+    }
+    v.concomitant.forEach(function(med){
+      if(PROTOCOL.prohibitedMeds.indexOf(med)>=0) out.push({ruleId:"PROHIBITED_MED",severity:"Major",description:"Prohibited concomitant medication recorded: "+med+"."});
+      else if(PROTOCOL.restrictedMeds.indexOf(med)>=0) out.push({ruleId:"RESTRICTED_MED",severity:"Minor",description:"Restricted concomitant medication used without documented justification: "+med+"."});
+    });
+    var crit=["labs","ecg","eligibility","final_assessment","tumor_assessment"];
+    v.missingAssessments.forEach(function(a){
+      var sev=(vs.critical&&crit.indexOf(a)>=0)?"Major":(crit.indexOf(a)>=0?"Minor":"Administrative");
+      out.push({ruleId:"MISSING_ASSESSMENT",severity:sev,description:"Required assessment '"+a+"' not documented at "+vs.name+"."});
+    });
+    if(vs.id==="SCR"){
+      if(v.subject.age<PROTOCOL.eligibility.minAge||v.subject.age>PROTOCOL.eligibility.maxAge)
+        out.push({ruleId:"ELIGIBILITY",severity:"Major",description:"Subject age ("+v.subject.age+") outside eligibility range ("+PROTOCOL.eligibility.minAge+"–"+PROTOCOL.eligibility.maxAge+")."});
+      if(!v.consentDocumented) out.push({ruleId:"CONSENT",severity:"Major",description:"Informed consent documentation missing at Screening."});
+      else if(v.consentDelayed) out.push({ruleId:"CONSENT",severity:"Administrative",description:"Informed consent signed but filed after the visit date."});
+    }
+    return out;
+  }
+
+  function detectMissedVisits(site){
+    var missed=[];
+    site.subjects.forEach(function(subj){
+      PROTOCOL.visits.forEach(function(vSpec){
+        var sd=new Date(TODAY); sd.setDate(sd.getDate()+subj.enrollDay+vSpec.day);
+        if(sd>TODAY) return;
+        var exists=site.visits.some(function(v){return v.subject.subjectId===subj.subjectId&&v.visitSpec.id===vSpec.id;});
+        if(!exists) missed.push({site:site,subjectId:subj.subjectId,visitName:vSpec.name,date:sd,closed:false,ruleId:"MISSED_VISIT",severity:vSpec.critical?"Major":"Minor",description:"Required "+vSpec.name+" visit not recorded for subject "+subj.subjectId+". Expected "+sd.toDateString()+"."});
+      });
+    });
+    return missed;
+  }
+
+  var allDeviations=[];
+  sites.forEach(function(site){
+    site.visits.forEach(function(v){
+      var devs=evaluateVisit(v);
+      devs.forEach(function(d){d.site=site;d.subjectId=v.subject.subjectId;d.visitName=v.visitSpec.name;d.date=v.actualDate;d.closed=v.closed&&!chance(0.3);allDeviations.push(d);});
+      v.deviations=devs;
+    });
+    detectMissedVisits(site).forEach(function(d){allDeviations.push(d);});
+  });
+
+  /* ── Site scoring ── */
+  function daysAgo(d){return Math.round((TODAY-d)/86400000);}
+
+  function scoreSite(site){
+    var devs=[];
+    site.visits.forEach(function(v){devs=devs.concat(v.deviations.map(function(d){d._visit=v;return d;}));});
+    devs=devs.concat(allDeviations.filter(function(d){return d.site===site&&d.ruleId==="MISSED_VISIT";}));
+    site.allDevs=devs;
+    var major=devs.filter(function(d){return d.severity==="Major";}).length;
+    var minor=devs.filter(function(d){return d.severity==="Minor";}).length;
+    var admin=devs.filter(function(d){return d.severity==="Administrative";}).length;
+    var openCapa=devs.filter(function(d){return !d.closed;}).length;
+    var last30=devs.filter(function(d){return daysAgo(d.date)<=30;}).length;
+    var prior30=devs.filter(function(d){var da=daysAgo(d.date);return da>30&&da<=60;}).length;
+    var delta=last30-prior30;
+    var tv=site.visits.length||1;
+    var mp=Math.min(60,(major/tv)*400);
+    var mnp=Math.min(25,(minor/tv)*150);
+    var tp=Math.min(10,Math.max(0,delta)*2.5);
+    var cp=Math.min(5,(devs.length?openCapa/devs.length:0)*8);
+    var score=Math.max(0,Math.min(100,Math.round(mp+mnp+tp+cp)));
+    var tier=score>=65?"High":(score>=35?"Medium":"Low");
+    site.stats={subjects:site.subjects.length,visits:tv,major:major,minor:minor,admin:admin,openCapa:openCapa,trendDelta:delta,riskScore:score,tier:tier,last30:last30,prior30:prior30,majorPts:Math.round(mp),minorPts:Math.round(mnp),trendPts:Math.round(tp),capaPts:Math.round(cp)};
+  }
+  sites.forEach(scoreSite);
+
+  /* ── KPI + hero stats ── */
+  function buildKPIs(){
+    var totMaj=allDeviations.filter(function(d){return d.severity==="Major";}).length;
+    var totMin=allDeviations.filter(function(d){return d.severity==="Minor";}).length;
+    var totAdm=allDeviations.filter(function(d){return d.severity==="Administrative";}).length;
+    var totOpen=allDeviations.filter(function(d){return !d.closed;}).length;
+    var highS=sites.filter(function(s){return s.stats.tier==="High";}).length;
+    var totDevs=totMaj+totMin+totAdm;
+    document.getElementById("kpiStrip").innerHTML=
+      kpi("",sites.length,"Active sites")+
+      kpi("risk",highS,"High-risk sites")+
+      kpi("",totVisits.toLocaleString(),"Patient visits reviewed")+
+      kpi("major",totMaj.toLocaleString(),"Major deviations")+
+      kpi("minor",totMin.toLocaleString(),"Minor deviations")+
+      kpi("admin",totOpen.toLocaleString(),"Open CAPA items")+
+      kpi("",totDevs.toLocaleString(),"Total deviations");
+    document.getElementById("snapshotBox").innerHTML="Snapshot: <b>"+TODAY.toDateString()+"</b><br>"+totSubj.toLocaleString()+" subjects · "+totVisits.toLocaleString()+" visits<br>"+totDevs.toLocaleString()+" deviations · "+totOpen.toLocaleString()+" open CAPA";
+    var hS=document.getElementById("hSites"); if(hS) hS.textContent=sites.length;
+    var hV=document.getElementById("hVisits"); if(hV) hV.textContent=totVisits.toLocaleString();
+    var hD=document.getElementById("hDevs"); if(hD) hD.textContent=totDevs.toLocaleString();
+    var hH=document.getElementById("hHigh"); if(hH) hH.textContent=highS;
+  }
+  function kpi(cls,val,lbl){return '<div class="kpi'+(cls?" "+cls:"")+'"><div class="num">'+val+'</div><div class="lbl">'+lbl+'</div></div>';}
+  buildKPIs();
+
+  document.getElementById("protocolSummary").innerHTML=
+    ps("Study",PROTOCOL.studyId+" Ph "+PROTOCOL.phase)+
+    ps("Drug",PROTOCOL.drug+" 200 mg")+
+    ps("Visits",PROTOCOL.visits.length+" scheduled")+
+    ps("Sites",numSites)+
+    ps("Age range",PROTOCOL.eligibility.minAge+"–"+PROTOCOL.eligibility.maxAge+" yrs")+
+    ps("Prohibited meds",PROTOCOL.prohibitedMeds.length)+
+    ps("Restricted meds",PROTOCOL.restrictedMeds.length);
+  function ps(k,v){return '<div class="ps-row"><span>'+k+'</span><span class="ps-val">'+v+'</span></div>';}
+
+  var regionSel=document.getElementById("regionFilter");
+  REGIONS.forEach(function(r){var o=document.createElement("option");o.value=r;o.textContent=r;regionSel.appendChild(o);});
+
+  /* ── Table rendering ── */
+  var tierDot={High:"sw-high",Medium:"sw-med",Low:"sw-low"};
+  var tbody=document.getElementById("ledgerBody");
+  var rowCount=document.getElementById("rowCount");
+  var PAGE=50;
+  var state={search:"",tiers:new Set(["High","Medium","Low"]),region:"",sort:"risk_desc",page:0};
+
+  function trendLabel(d){
+    if(d>0) return '<span class="trend-up">▲ +'+d+'</span>';
+    if(d<0) return '<span class="trend-down">▼ '+d+'</span>';
+    return '<span class="trend-flat">– flat</span>';
+  }
+  function scoreColor(n){return n>=65?"var(--high-risk)":(n>=35?"var(--med-risk)":"var(--low-risk)");}
+
+  function applyAndRender(flashId){
+    var filtered=sites.filter(function(s){
+      if(!state.tiers.has(s.stats.tier)) return false;
+      if(state.region&&s.region!==state.region) return false;
+      if(state.search){var q=state.search.toLowerCase();if(s.siteId.toLowerCase().indexOf(q)<0&&s.region.toLowerCase().indexOf(q)<0) return false;}
+      return true;
+    });
+    filtered.sort(function(a,b){
+      switch(state.sort){
+        case "major_desc": return b.stats.major-a.stats.major;
+        case "trend_desc": return b.stats.trendDelta-a.stats.trendDelta;
+        case "site_id":    return a.siteId.localeCompare(b.siteId);
+        default:           return b.stats.riskScore-a.stats.riskScore;
+      }
+    });
+    var totalPages=Math.max(1,Math.ceil(filtered.length/PAGE));
+    state.page=Math.min(state.page,totalPages-1);
+    var slice=filtered.slice(state.page*PAGE,(state.page+1)*PAGE);
+    rowCount.textContent=filtered.length+" of "+sites.length+" sites  (page "+(state.page+1)+"/"+totalPages+")";
+
+    tbody.innerHTML=slice.map(function(s){
+      var st=s.stats;
+      return '<tr data-site="'+s.siteId+'"'+(s.siteId===flashId?' class="flash-row"':'')+'>'+
+        '<td><div class="site-id-cell"><span class="tier-dot '+tierDot[st.tier]+'"></span>'+s.siteId+'</div></td>'+
+        '<td><span class="region-badge">'+s.region+'</span></td>'+
+        '<td class="num">'+st.subjects+'</td>'+
+        '<td class="num">'+st.visits+'</td>'+
+        '<td class="num" style="color:var(--high-risk);font-weight:600;">'+st.major+'</td>'+
+        '<td class="num" style="color:var(--med-risk);font-weight:600;">'+st.minor+'</td>'+
+        '<td class="num" style="color:var(--admin-risk);">'+st.admin+'</td>'+
+        '<td class="num">'+st.openCapa+'</td>'+
+        '<td>'+trendLabel(st.trendDelta)+'</td>'+
+        '<td class="num risk-score" style="color:'+scoreColor(st.riskScore)+'">'+st.riskScore+'</td>'+
+      '</tr>';
+    }).join("")||'<tr><td colspan="10" class="empty">No sites match the current filters.</td></tr>';
+
+    var pagerEl=document.getElementById("pager");
+    if(totalPages<=1){pagerEl.innerHTML="";}
+    else{
+      var btns="";
+      for(var p=0;p<totalPages;p++) btns+='<button data-p="'+p+'" class="'+(p===state.page?"":"sec")+'">'+(p+1)+'</button>';
+      pagerEl.innerHTML=btns;
+      Array.prototype.forEach.call(pagerEl.querySelectorAll("button"),function(b){
+        b.addEventListener("click",function(){state.page=parseInt(b.getAttribute("data-p"),10);applyAndRender();});
+      });
+    }
+    Array.prototype.forEach.call(tbody.querySelectorAll("tr[data-site]"),function(tr){
+      tr.addEventListener("click",function(){openDrawer(tr.getAttribute("data-site"));});
+    });
+  }
+
+  document.getElementById("searchBox").addEventListener("input",function(e){state.search=e.target.value;state.page=0;applyAndRender();});
+  document.getElementById("regionFilter").addEventListener("change",function(e){state.region=e.target.value;state.page=0;applyAndRender();});
+  document.getElementById("sortSelect").addEventListener("change",function(e){state.sort=e.target.value;state.page=0;applyAndRender();});
+  Array.prototype.forEach.call(document.querySelectorAll(".tierFilter"),function(cb){
+    cb.addEventListener("change",function(){if(cb.checked) state.tiers.add(cb.value);else state.tiers.delete(cb.value);state.page=0;applyAndRender();});
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("th[data-key]"),function(th){
+    th.addEventListener("click",function(){
+      var key=th.getAttribute("data-key");
+      var map={major:"major_desc",riskScore:"risk_desc",trend:"trend_desc",siteId:"site_id"};
+      if(map[key]){state.sort=map[key];document.getElementById("sortSelect").value=map[key];state.page=0;applyAndRender();}
+    });
+  });
+
+  /* ── Simulation ── */
+  var simR=mulberry32(99887766);
+  function sInt(a,b){return Math.floor(simR()*(b-a+1))+a;}
+  function sCh(p){return simR()<p;}
+
+  document.getElementById("refreshBtn").addEventListener("click",function(){
+    var btn=document.getElementById("refreshBtn");
+    btn.classList.add("loading"); btn.disabled=true;
+    document.getElementById("refreshInfo").textContent="Processing incoming visit events…";
+    setTimeout(function(){
+      var n=sInt(3,7); var shuffled=sites.slice().sort(function(){return simR()-0.5;});
+      var updated=shuffled.slice(0,n); var newCount=0; var log=[];
+      updated.forEach(function(site){
+        var subj=site.subjects[sInt(0,site.subjects.length-1)];
+        var vSpec=PROTOCOL.visits[sInt(0,PROTOCOL.visits.length-1)];
+        var p=site.propensity;
+        var sd=new Date(TODAY); sd.setDate(sd.getDate()-sInt(1,30));
+        var ad=new Date(sd); ad.setDate(ad.getDate()+Math.round((simR()-0.5)*2*(vSpec.window+5)*(0.4+p*1.3)));
+        if(ad>TODAY) ad=new Date(TODAY);
+        var dt=PROTOCOL.dosing.targetMg; var dd=(simR()-0.5)*2*(3+p*22);
+        var dose=Math.round(dt*(1+dd/100));
+        var conc=[]; if(sCh(0.03+p*0.1)) conc.push(PROTOCOL.prohibitedMeds[sInt(0,PROTOCOL.prohibitedMeds.length-1)]); if(sCh(0.05+p*0.12)) conc.push(PROTOCOL.restrictedMeds[sInt(0,PROTOCOL.restrictedMeds.length-1)]);
+        var miss=[]; vSpec.req.forEach(function(a){if(sCh(0.005+p*0.08)) miss.push(a);});
+        var vr={site:site,subject:subj,visitSpec:vSpec,scheduledDate:sd,actualDate:ad,dayDiff:Math.round((ad-sd)/86400000),dose:dose,concomitant:conc,missingAssessments:miss,consentDocumented:true,consentDelayed:false,closed:false};
+        vr.deviations=evaluateVisit(vr);
+        site.visits.push(vr); totVisits++; newCount++;
+        vr.deviations.forEach(function(d){d.site=site;d.subjectId=subj.subjectId;d.visitName=vSpec.name;d.date=ad;d.closed=false;allDeviations.push(d);});
+        for(var i=allDeviations.length-1;i>=0;i--){var dd2=allDeviations[i];if(dd2.ruleId==="MISSED_VISIT"&&dd2.site===site&&dd2.subjectId===subj.subjectId&&dd2.visitName===vSpec.name)allDeviations.splice(i,1);}
+        scoreSite(site);
+        log.push(site.siteId+"—"+vSpec.name+(vr.deviations.length?" ("+vr.deviations[0].severity+")":""));
+      });
+      buildKPIs();
+      applyAndRender(updated[0]?updated[0].siteId:null);
+      updateTicker("⚡ Simulation: "+newCount+" new event(s) — "+log.slice(0,3).join(" · ")+(log.length>3?" …":""),true);
+      document.getElementById("refreshInfo").textContent=newCount+" event(s) injected · "+updated.length+" site(s) rescored";
+      btn.classList.remove("loading"); btn.disabled=false;
+    },900);
+  });
+
+  /* ── Ticker ── */
+  var MSGS=["Monitoring 250 active sites across 8 regions — ONCO-4471 Phase III","ICH E6(R2)-aligned severity classification active","Site risk scores updated in real time based on deviation rates and trends","CAPA-ready reports available — click any site row to open the detail drawer","Protocol: Compound X 200 mg · 8 scheduled visits · ±window enforcement active","Prohibited medications tracked: Warfarin, Ketoconazole, live vaccines, other IMP","Eligibility age range 18–75 enforced at Screening visit","All deviations classified Major / Minor / Administrative per ICH E6(R2)","Open CAPA burden factored into site risk score (up to 5 pts)","30-day trend detects worsening sites before they escalate to high risk"];
+  var tickerIdx=0;
+  function updateTicker(msg,flash){
+    var el=document.getElementById("tickerText");
+    el.textContent=msg||MSGS[tickerIdx%MSGS.length];
+    if(flash){el.style.color="#fbbf24";setTimeout(function(){el.style.color="";},3000);}
+    document.getElementById("liveTs").textContent=new Date().toLocaleTimeString();
+  }
+  updateTicker(MSGS[0]);
+  setInterval(function(){tickerIdx++;updateTicker();},6000);
+
+  /* ── Drawer ── */
+  var drawer=document.getElementById("drawer");
+  var overlay=document.getElementById("drawerOverlay");
+  var curSite=null; var curSev="all";
+
+  function sevTag(sev){return sev==="Major"?"tag-major":(sev==="Minor"?"tag-minor":"tag-admin");}
+
+  function openDrawer(siteId){
+    curSite=sites.find(function(s){return s.siteId===siteId;});
+    curSev="all";
+    Array.prototype.forEach.call(document.querySelectorAll(".sev-chip"),function(c){c.classList.toggle("active",c.getAttribute("data-sev")==="all");});
+    renderDrawer();
+    drawer.classList.add("open"); overlay.classList.add("open");
+    Array.prototype.forEach.call(tbody.querySelectorAll("tr"),function(tr){tr.classList.toggle("active-row",tr.getAttribute("data-site")===siteId);});
+  }
+  function closeDrawer(){
+    drawer.classList.remove("open"); overlay.classList.remove("open");
+    Array.prototype.forEach.call(tbody.querySelectorAll("tr"),function(tr){tr.classList.remove("active-row");});
+  }
+  document.getElementById("drawerClose").addEventListener("click",closeDrawer);
+  document.getElementById("drawerCloseBtn2").addEventListener("click",closeDrawer);
+  overlay.addEventListener("click",closeDrawer);
+  Array.prototype.forEach.call(document.querySelectorAll(".sev-chip"),function(chip){
+    chip.addEventListener("click",function(){curSev=chip.getAttribute("data-sev");Array.prototype.forEach.call(document.querySelectorAll(".sev-chip"),function(c){c.classList.toggle("active",c===chip);});renderDrawer(true);});
+  });
+
+  function buildNarrative(s){
+    var st=s.stats; var tier=st.tier; var reasons=[]; var suggestions=[];
+    if(st.majorPts>=30) reasons.push("High rate of <b>Major deviations</b> ("+st.major+" across "+st.visits+" visits — "+st.majorPts+"/60 pts)");
+    else if(st.majorPts>=10) reasons.push("Elevated Major deviation rate ("+st.major+" major deviations — "+st.majorPts+"/60 pts)");
+    if(st.minorPts>=15) reasons.push("Elevated <b>Minor deviation</b> rate ("+st.minor+" minor — "+st.minorPts+"/25 pts)");
+    if(st.trendPts>=5) reasons.push("30-day trend <b>worsening</b>: "+st.last30+" deviations in last 30 days vs "+st.prior30+" prior (+"+st.trendDelta+")");
+    else if(st.trendDelta<0) reasons.push("30-day trend <b>improving</b>: "+Math.abs(st.trendDelta)+" fewer deviations vs prior period");
+    if(st.capaPts>=3) reasons.push("High <b>open CAPA burden</b>: "+st.openCapa+" open items ("+st.capaPts+"/5 pts)");
+    var byRule={};
+    s.allDevs.forEach(function(d){byRule[d.ruleId]=(byRule[d.ruleId]||0)+1;});
+    var ruled=Object.keys(byRule).sort(function(a,b){return byRule[b]-byRule[a];});
+    if(ruled.length) reasons.push("Most frequent type: <b>"+ruled[0].replace(/_/g," ").toLowerCase()+"</b> ("+byRule[ruled[0]]+" occurrences)");
+    if(st.majorPts>=20) suggestions.push("Initiate targeted site audit within 14 days");
+    if(st.trendPts>=5) suggestions.push("Schedule urgent site re-training call");
+    if(st.capaPts>=3) suggestions.push("Review and close overdue CAPA items with site PI");
+    if(byRule["PROHIBITED_MED"]>0) suggestions.push("Conduct full concomitant medication reconciliation");
+    if(byRule["MISSED_VISIT"]>0) suggestions.push("Enable automated visit-due reminders in EDC");
+    if(!suggestions.length) suggestions.push("Continue routine monitoring — no immediate escalation required");
+    if(!reasons.length) reasons.push("Risk score "+st.riskScore+"/100 — within acceptable parameters");
+    var el=document.getElementById("riskNarrative");
+    var cls=tier==="High"?"risk-why-high":(tier==="Low"?"risk-why-low":"");
+    el.className="risk-why visible"+(cls?" "+cls:"");
+    var icon=tier==="High"?"⚠ ":(tier==="Low"?"✓ ":"ℹ ");
+    el.innerHTML='<h4>'+icon+'Why is this site '+tier.toLowerCase()+' risk? (score '+st.riskScore+'/100)</h4>'+
+      '<ul>'+reasons.map(function(r){return '<li>'+r+'</li>';}).join("")+'</ul>'+
+      '<div style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(0,0,0,0.1);"><b>Recommended actions:</b> '+suggestions.join(" · ")+'</div>';
+  }
+
+  function buildScoreBar(st){
+    function bar(pts,max,cls){return '<div class="score-bar-wrap"><div class="score-bar '+cls+'" style="width:'+Math.round(pts/max*100)+'%"></div></div>';}
+    document.getElementById("scoreBreakdown").innerHTML=
+      '<div class="score-item"><b>Major rate</b> '+st.majorPts+'/60 pts'+bar(st.majorPts,60,"sb-major")+'</div>'+
+      '<div class="score-item"><b>Minor rate</b> '+st.minorPts+'/25 pts'+bar(st.minorPts,25,"sb-minor")+'</div>'+
+      '<div class="score-item"><b>30-day trend</b> '+st.trendPts+'/10 pts'+bar(st.trendPts,10,"sb-trend")+'</div>'+
+      '<div class="score-item"><b>Open CAPA</b> '+st.capaPts+'/5 pts'+bar(st.capaPts,5,"sb-capa")+'</div>';
+  }
+
+  function renderDrawer(keepHeader){
+    if(!curSite) return;
+    var s=curSite; var st=s.stats;
+    document.getElementById("drawerTitle").textContent=s.siteId+" — "+s.region;
+    document.getElementById("drawerSub").textContent="PROTOCOL "+PROTOCOL.studyId+" · risk tier: "+st.tier+" · score "+st.riskScore+"/100";
+    document.getElementById("drawerStats").innerHTML=
+      '<div class="dstat"><b>'+st.subjects+'</b>Subjects</div>'+
+      '<div class="dstat"><b>'+st.visits+'</b>Visits</div>'+
+      '<div class="dstat"><b style="color:#f87171">'+st.major+'</b>Major</div>'+
+      '<div class="dstat"><b style="color:#fbbf24">'+st.minor+'</b>Minor</div>'+
+      '<div class="dstat"><b style="color:#38bdf8">'+st.admin+'</b>Admin</div>'+
+      '<div class="dstat"><b>'+st.openCapa+'</b>Open CAPA</div>';
+    buildNarrative(s);
+    buildScoreBar(st);
+
+    var devs=s.allDevs.slice().sort(function(a,b){var o={Major:0,Minor:1,Administrative:2};return o[a.severity]-o[b.severity]||(b.date-a.date);});
+    if(curSev!=="all") devs=devs.filter(function(d){return d.severity===curSev;});
+    var list=document.getElementById("devList");
+    if(!devs.length){list.innerHTML='<div style="text-align:center;padding:24px;color:var(--text-muted);">No deviations for this filter.</div>';return;}
+    list.innerHTML=devs.slice(0,300).map(function(d){
+      var capa=CAPA_TEXT[d.ruleId]||{capa:"Review with site and clinical operations.",preventive:"Assess root cause and update site training."};
+      return '<div class="dev-item'+(d.ruleId==="MISSED_VISIT"?" missed":"")+'">'+
+        '<div class="dev-head">'+
+          '<div><span class="dev-tag '+sevTag(d.severity)+'">'+d.severity.toUpperCase()+'</span> <span style="font-size:10px;color:var(--text-muted)">'+d.ruleId.replace(/_/g," ")+'</span></div>'+
+          '<div class="dev-meta">'+d.subjectId+' · '+d.visitName+' · '+d.date.toDateString()+(d.closed?' · <span style="color:var(--low-risk)">closed</span>':' · <span style="color:var(--high-risk)">open</span>')+'</div>'+
+        '</div>'+
+        '<div class="dev-body">'+d.description+'</div>'+
+        '<div class="dev-capa"><b>Corrective:</b> '+capa.capa+'<br><b>Preventive:</b> '+capa.preventive+'</div>'+
+      '</div>';
+    }).join("")+(devs.length>300?'<div style="text-align:center;padding:10px;color:var(--text-muted);font-size:11px;">Showing first 300 of '+devs.length+' deviations.</div>':"");
+  }
+
+  /* ── CAPA export ── */
+  function download(fn,txt){var b=new Blob([txt],{type:"text/plain"});var u=URL.createObjectURL(b);var a=document.createElement("a");a.href=u;a.download=fn;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(u);}
+
+  document.getElementById("capaReportBtn").addEventListener("click",function(){
+    if(!curSite) return;
+    var s=curSite; var st=s.stats; var lines=[];
+    lines.push("═══════════════════════════════════════════════════════════════");
+    lines.push("  CAPA-READY PROTOCOL DEVIATION REPORT");
+    lines.push("═══════════════════════════════════════════════════════════════");
+    lines.push("Study:         "+PROTOCOL.studyId+" Phase "+PROTOCOL.phase);
+    lines.push("Drug:          "+PROTOCOL.drug+" (target: "+PROTOCOL.dosing.targetMg+" mg)");
+    lines.push("Site:          "+s.siteId+"  ("+s.region+")");
+    lines.push("Report date:   "+TODAY.toDateString());
+    lines.push("Risk tier:     "+st.tier+"  |  Risk score: "+st.riskScore+"/100");
+    lines.push("Subjects:      "+st.subjects+"  |  Visits reviewed: "+st.visits);
+    lines.push("Deviations —   Major: "+st.major+"  Minor: "+st.minor+"  Administrative: "+st.admin);
+    lines.push("Open CAPA:     "+st.openCapa);
+    lines.push("");
+    lines.push("RISK SCORE BREAKDOWN");
+    lines.push("  Major deviation rate:    "+st.majorPts+"/60 pts");
+    lines.push("  Minor deviation rate:    "+st.minorPts+"/25 pts");
+    lines.push("  30-day trend:            "+st.trendPts+"/10 pts");
+    lines.push("  Open CAPA burden:        "+st.capaPts+"/5 pts");
+    lines.push("  TOTAL:                   "+st.riskScore+"/100");
+    lines.push("");
+    lines.push("DEVIATIONS AND RECOMMENDED CAPA");
+    lines.push("───────────────────────────────────────────────────────────────");
+    var devs=s.allDevs.slice().sort(function(a,b){var o={Major:0,Minor:1,Administrative:2};return o[a.severity]-o[b.severity]||(b.date-a.date);});
+    devs.forEach(function(d,i){
+      var c=CAPA_TEXT[d.ruleId]||{capa:"Review with site and clinical operations.",preventive:"Assess root cause and update training."};
+      lines.push((i+1)+". ["+d.severity.toUpperCase()+"] "+d.ruleId.replace(/_/g," ")+" — "+(d.closed?"CLOSED":"OPEN"));
+      lines.push("   Subject: "+d.subjectId+"  Visit: "+d.visitName+"  Date: "+d.date.toDateString());
+      lines.push("   Finding:            "+d.description);
+      lines.push("   Corrective action:  "+c.capa);
+      lines.push("   Preventive action:  "+c.preventive);
+      lines.push("");
+    });
+    lines.push("═══════════════════════════════════════════════════════════════");
+    lines.push("END — "+s.siteId+" — Generated "+new Date().toISOString());
+    download(s.siteId+"_CAPA_report.txt",lines.join("\n"));
+  });
+
+  /* ── CSV export ── */
+  document.getElementById("exportCsvBtn").addEventListener("click",function(){
+    var rows=[["site_id","region","subjects","visits","major","minor","administrative","open_capa","trend_30d","risk_score","tier","major_pts","minor_pts","trend_pts","capa_pts"]];
+    sites.slice().sort(function(a,b){return b.stats.riskScore-a.stats.riskScore;}).forEach(function(s){
+      var st=s.stats;
+      rows.push([s.siteId,s.region,st.subjects,st.visits,st.major,st.minor,st.admin,st.openCapa,st.trendDelta,st.riskScore,st.tier,st.majorPts,st.minorPts,st.trendPts,st.capaPts]);
+    });
+    download("site_risk_summary.csv",rows.map(function(r){return r.join(",");}).join("\n"));
+  });
+
+  applyAndRender();
+})();
+</script>
+</body>
+</html>
