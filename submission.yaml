@@ -9,7 +9,7 @@
 # =============================================================================
 
 team:
-  name: ""                             # REQUIRED — e.g., "Orion Squad"
+  name: "NEXORA"                             # REQUIRED — e.g., "Orion Squad"
   track: "AI"                            # REQUIRED — one of: AI | DevOps | Sustainability | Open
   lead:
     name: "HIYA NILESH SACHANIA"                           # REQUIRED — e.g., "Alice Chen"
@@ -23,7 +23,7 @@ team:
       email: "26it009@charusat.edu.in"
 
 submission:
-  title: ""                            # REQUIRED — Project display name, e.g., "SmartOps Dashboard"
+  title: "TrialGuard: Clinical Trial Risk & Protocol Deviation Monitor"                            # REQUIRED — Project display name, e.g., "SmartOps Dashboard"
 
   problem_statement: >                 # REQUIRED — 1-3 sentences. What problem? Who has it?
   Clinical trial risk managers struggle to detect protocol deviations such asmissed visits, wrong dosing,
