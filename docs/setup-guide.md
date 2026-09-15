@@ -18,7 +18,7 @@ No environment variables are required for the current prototype.
 
 The application uses synthetic sample data and runs directly in the web browser.
 
-| Variable | Description | Required |
+| Variable  | Required |
 |---|---|---|
 | `WATSONX_API_KEY` |  NO |
 | `WATSONX_PROJECT_ID` | NO |
