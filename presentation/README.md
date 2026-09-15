@@ -1,6 +1,6 @@
 # Presentation
 
-Place your slide deck in this folder.
+The presentation is in "presentation" folder in file named "slides.pdf"
 
 ## Accepted Formats
 
