@@ -10,8 +10,8 @@
 |---|---|
 | **Team Name** | [NEXORA] |
 | **Track** | [AI] |
-| **Team Lead** | [HIYA SACHANIA] — [26it079@charusat.edu.in] |
-| **Members** | [Name 1], [Name 2], [Name 3] |
+| **Team Lead** | [HIYA NILESH SACHANIA] — [26it079@charusat.edu.in] |
+| **Members** | [HIRVA MAHENDRAKUMAR KHANPARA], [KESHA RASHMINBHAI LADANI], [YASHVI BHAVESHBHAI BHIMANI] |
 
 ---
 
@@ -19,25 +19,22 @@
 
 > In 2–3 sentences: What problem does your project solve? Who experiences this problem?
 
-[Describe the real-world problem your project addresses. Be specific about who the user is and what pain point they face.]
+Large clinical trials involve thousands of patient visits across many sites, making it difficult to manually detect missed visits, wrong doses, prohibited medicines, and missing tests.
+Risk managers need a simple system to quickly detect these problems, understand their severity, and identify high-risk sites before they become serious.
 
 ---
 
 ## 💡 Solution
-
-> In 2–3 sentences: What did you build? How does it solve the problem above?
-
-[Describe your solution clearly. Explain the core mechanism — what makes it work.]
-
+We built an AI-powered Clinical Trial Risk Monitor that checks patient records against clinical trial protocols to detect missed visits, wrong dosing, and other protocol deviations. It classifies the severity of deviations, identifies high-risk sites, and provides clear risk insights and recommended actions to help risk managers take action before problems become serious.
 ---
 
 ## ✨ Key Features
 
-- **Feature 1:** [Brief description — e.g., "Real-time anomaly detection using watsonx.ai"]
-- **Feature 2:** [Brief description]
-- **Feature 3:** [Brief description]
-- **Feature 4:** [Optional]
-- **Feature 5:** [Optional]
+- **Feature 1:** [Protocol deviation detection for missed visits, wrong dosing, and banned co-medications]
+- **Feature 2:** [Automatic classification of deviations by severity]
+- **Feature 3:** [Site-level risk scoring to identify high-risk clinical trial sites]
+- **Feature 4:** [Real-time dashboard showing trial risks and detected deviations]
+- **Feature 5:** [Recommended corrective actions and CAPA-ready risk reports]
 
 ---
 
