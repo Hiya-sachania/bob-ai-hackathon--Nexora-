@@ -21,19 +21,13 @@ graph TD
 
 
 ## Components
-Copy `.env.example` to `.env` and fill in the values:
-
-```bash
-cp .env.example .env
-```
-
-| **Component**     | **Technology**                  | **Responsibility**|
-
-| **Frontend**      | HTML, CSS, Vanilla JavaScript   | Dashboard UI, site search/filtering, risk visualization, site investigation                       |
-| **Backend API**   | None — Client-side JavaScript   | Protocol comparison, deviation detection, severity classification, risk calculation               |
-| **AI / ML**       | IBM Bob AI                      | AI-assisted solution development and innovation workflow                                          |
-| **Database**      | None — Simulated/In-memory data | Generates and holds simulated clinical trial sites, subjects, visits, medications, and deviations |
-| **Notifications** | None                            | Risk indicators and dashboard alerts for high-risk sites                                          |
+| Component | Technology | Responsibility |
+|---|---|---|
+| Frontend | [HTML, CSS, Vanilla JavaScript] | [Dashboard UI, site search/filtering, risk visualization, site investigation] |
+| Backend API | [None — Client-side JavaScript] | [Protocol comparison, deviation detection, severity classification, risk calculation] |
+| AI / ML | [IBM Bob AI] | [AI-assisted solution development and innovation workflow] |
+| Database | [None — Simulated/In-memory data] | [Generates and holds simulated clinical trial sites, subjects, visits, medications, and deviations] |
+| Notifications | [None] | [Risk indicators and dashboard alerts for high-risk sites] |
 
 ## Data Flow
 
