@@ -1,6 +1,8 @@
 # Source Code
 
-Place all your project's source code in this folder.
+src/
+  frontend/ -->index.html
+            -->style.css
 
 ## Structure Guidelines
 
