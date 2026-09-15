@@ -1,4 +1,4 @@
-# 🚀 [Your Project Title Here]
+# 🚀 [TrialGuard: Clinical Trial Risk & Protocol Deviation Monitor]
 
 > ⚠️ **Replace everything in `[ ]` brackets with your actual content before submission.**
 
@@ -8,9 +8,9 @@
 
 | Field | Value |
 |---|---|
-| **Team Name** | [Your Team Name] |
-| **Track** | [AI / DevOps / Sustainability / Open] |
-| **Team Lead** | [Name] — [email@ibm.com] |
+| **Team Name** | [NEXORA] |
+| **Track** | [AI] |
+| **Team Lead** | [HIYA SACHANIA] — [26it079@charusat.edu.in] |
 | **Members** | [Name 1], [Name 2], [Name 3] |
 
 ---
